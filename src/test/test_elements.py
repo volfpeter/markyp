@@ -3,6 +3,7 @@ from markyp.elements import BaseElement,\
                             Element,\
                             EmptyElement,\
                             SelfClosedElement,\
+                            StandaloneElement,\
                             StringElement
 
 def test_BaseElement():
@@ -179,6 +180,40 @@ def test_SelfClosedElement():
     assert str(SelfClosedElement(**{"string": "foo", "int": 3, "float": 3.1})) == "<SelfClosedElement string=\"foo\" int=\"3\" float=\"3.1\"/>"
     assert TE(**{"string": "foo", "int": 3, "float": 3.1}).markup == "<TE string=\"foo\" int=\"3\" float=\"3.1\"/>"
     assert str(TE(**{"string": "foo", "int": 3, "float": 3.1})) == "<TE string=\"foo\" int=\"3\" float=\"3.1\"/>"
+
+def test_StandaloneElement():
+    class TE(StandaloneElement):
+        __slots__ = ()
+
+    assert StandaloneElement().markup == "<StandaloneElement >"
+    assert str(StandaloneElement()) == "<StandaloneElement >"
+    assert TE().markup == "<TE >"
+    assert str(TE()) == "<TE >"
+
+    assert StandaloneElement(class_="test").markup == "<StandaloneElement class=\"test\">"
+    assert str(StandaloneElement(class_="test")) == "<StandaloneElement class=\"test\">"
+    assert TE(class_="test").markup == "<TE class=\"test\">"
+    assert str(TE(class_="test")) == "<TE class=\"test\">"
+
+    assert StandaloneElement(class_="test", **{"class": "no-test"}).markup == "<StandaloneElement class=\"test\">"
+    assert str(StandaloneElement(class_="test", **{"class": "no-test"})) == "<StandaloneElement class=\"test\">"
+    assert TE(class_="test", **{"class": "no-test"}).markup == "<TE class=\"test\">"
+    assert str(TE(class_="test", **{"class": "no-test"})) == "<TE class=\"test\">"
+
+    assert StandaloneElement(string="foo", int=3, float=3.1).markup == "<StandaloneElement string=\"foo\" int=\"3\" float=\"3.1\">"
+    assert str(StandaloneElement(string="foo", int=3, float=3.1)) == "<StandaloneElement string=\"foo\" int=\"3\" float=\"3.1\">"
+    assert TE(string="foo", int=3, float=3.1).markup == "<TE string=\"foo\" int=\"3\" float=\"3.1\">"
+    assert str(TE(string="foo", int=3, float=3.1)) == "<TE string=\"foo\" int=\"3\" float=\"3.1\">"
+
+    assert StandaloneElement(class_="cls", string="foo", int=3, float=3.1).markup == "<StandaloneElement string=\"foo\" int=\"3\" float=\"3.1\" class=\"cls\">"
+    assert str(StandaloneElement(class_="cls", string="foo", int=3, float=3.1)) == "<StandaloneElement string=\"foo\" int=\"3\" float=\"3.1\" class=\"cls\">"
+    assert TE(class_="cls", string="foo", int=3, float=3.1).markup == "<TE string=\"foo\" int=\"3\" float=\"3.1\" class=\"cls\">"
+    assert str(TE(class_="cls", string="foo", int=3, float=3.1)) == "<TE string=\"foo\" int=\"3\" float=\"3.1\" class=\"cls\">"
+
+    assert StandaloneElement(**{"string": "foo", "int": 3, "float": 3.1}).markup == "<StandaloneElement string=\"foo\" int=\"3\" float=\"3.1\">"
+    assert str(StandaloneElement(**{"string": "foo", "int": 3, "float": 3.1})) == "<StandaloneElement string=\"foo\" int=\"3\" float=\"3.1\">"
+    assert TE(**{"string": "foo", "int": 3, "float": 3.1}).markup == "<TE string=\"foo\" int=\"3\" float=\"3.1\">"
+    assert str(TE(**{"string": "foo", "int": 3, "float": 3.1})) == "<TE string=\"foo\" int=\"3\" float=\"3.1\">"
 
 def test_StringElement():
     class TE(StringElement):

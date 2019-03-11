@@ -203,6 +203,19 @@ class SelfClosedElement(EmptyElement):
         return f"<{self.element_name} {format_properties(self.properties)}/>"
 
 
+class StandaloneElement(EmptyElement):
+    """
+    A stand-alone version of `EmptyElement` that has no closing tag.
+
+    Define `__slots__` in derived classes to enjoy the performance benefits the feature provides.
+    """
+
+    __slots__ = ()
+
+    def __str__(self) -> str:
+        return f"<{self.element_name} {format_properties(self.properties)}>"
+
+
 class StringElement(IElement):
     """
     Base class for elements that have a single string children and any number of properties.
