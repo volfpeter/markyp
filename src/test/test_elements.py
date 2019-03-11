@@ -1,6 +1,7 @@
 from markyp.elements import BaseElement,\
                             ChildrenOnlyElement,\
                             Element,\
+                            ElementSequence,\
                             EmptyElement,\
                             SelfClosedElement,\
                             StandaloneElement,\
@@ -112,6 +113,18 @@ def test_Element():
         "<TE value=\"4.2\" class=\"class test\">\nfoo\n<TE >\n<TE >\nbaz\n</TE>\n</TE>\nbar\n</TE>"
     assert str(TE("foo", TE(TE("baz")), "bar", class_="class test", value=4.2)) ==\
         "<TE value=\"4.2\" class=\"class test\">\nfoo\n<TE >\n<TE >\nbaz\n</TE>\n</TE>\nbar\n</TE>"
+
+def test_ElementSequence():
+    assert ElementSequence().markup == ""
+    assert str(ElementSequence()) == ""
+
+    es = ElementSequence(
+        Element(),
+        "string element",
+        SelfClosedElement()
+    )
+    assert es.markup == "<Element ></Element>\nstring element\n<SelfClosedElement />"
+    assert str(es) == "<Element ></Element>\nstring element\n<SelfClosedElement />"
 
 def test_EmptyElement():
     class TE(EmptyElement):

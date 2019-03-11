@@ -154,6 +154,17 @@ class Element(IElement):
         return False
 
 
+class ElementSequence(ChildrenOnlyElement):
+    """
+    `ChildrenOnlyElement` without the opening and closing tags, i.e. effectively a sequence of elements.
+    """
+
+    __slots__ = ()
+
+    def __str__(self) -> str:
+        return "" if len(self.children) == 0 else "\n".join((xml_format_element(element) for element in self.children))
+
+
 class EmptyElement(IElement):
     """
     Base class for elements that have no children, only properties.
