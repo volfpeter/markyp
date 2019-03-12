@@ -5,6 +5,9 @@ Type declarations and the most basic building blocks of `markyp`.
 from typing import Any, Dict, TypeVar, Union
 
 
+__version__ = "0.1903.0"
+
+
 class IElement(object):
     """
     Abstract base class for markup elements.
