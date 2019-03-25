@@ -53,3 +53,6 @@ def test_format_element_sequence():
         "\n<TE >\nfoo-1\n<TE >\nfoo-inner\n<TE >\nfoo-inner-inner\n</TE>\n</TE>\nfoo-2\n</TE>\nbar\n<TE baz=\"baz\"></TE>\n"
     assert format_element_sequence(elements) ==\
         "\n<TE >\nfoo-1\n<TE >\nfoo-inner\n<TE >\nfoo-inner-inner\n</TE>\n</TE>\nfoo-2\n</TE>\nbar\n<TE baz=\"baz\"></TE>\n"
+
+    assert format_element_sequence(["<markup></markup>"], element_formatter=str) == "\n<markup></markup>\n"
+    assert format_element_sequence(["<markup></markup>"], inline=True) == "&lt;markup&gt;&lt;/markup&gt;"

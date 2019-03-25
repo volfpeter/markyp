@@ -77,4 +77,4 @@ def format_element_sequence(elements: Sequence[ElementType], *,
         separator = "\n"
         elements = ("", *elements, "")
 
-    return separator.join((xml_format_element(element) for element in elements))
+    return separator.join((element_formatter(element) for element in elements))
