@@ -17,13 +17,11 @@ def test_BaseElement():
             self.properties = None
 
         def get_element_children(self):
-            if super().get_element_children() is not None:
-                raise Exception("BaseElement should not have children by default.")
+            assert super().get_element_children() is None
             return self.children
 
         def get_element_properties(self):
-            if super().get_element_properties() is not None:
-                raise Exception("BaseElement should not have properties by default.")
+            assert super().get_element_properties() is None
             return self.properties
 
     te = TE()
