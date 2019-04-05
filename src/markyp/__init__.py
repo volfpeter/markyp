@@ -35,7 +35,7 @@ ElementType = Union[IElement, str]
 """Type denoting `IElement` or string objects."""
 
 
-PropertyValue = Union[str, int, float, bool]
+PropertyValue = Union[str, int, float, bool, None]
 """Type to use for type hinting element properties."""
 
 
