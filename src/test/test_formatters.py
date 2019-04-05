@@ -9,25 +9,29 @@ class TE(Element):
 
 def test_format_property():
     for value in ("", " ", "foo", "foo, bar"):
-        assert format_property(value) == f"\"{value}\""
+        assert format_property("prop_name", value) == f"prop_name=\"{value}\""
 
     for value in range(0, 99, 7):
-        assert format_property(value) == f"\"{value}\""
-        assert format_property(value + 0.123) == f"\"{value + 0.123}\""
+        assert format_property("prop_name", value) == f"prop_name=\"{value}\""
+        assert format_property("prop_name", value + 0.123) == f"prop_name=\"{value + 0.123}\""
 
-    assert format_property(True) == "\"true\""
-    assert format_property(False) == "\"false\""
+    assert format_property("prop_name", True) == "prop_name=\"true\""
+    assert format_property("prop_name", False) == "prop_name=\"false\""
+    assert format_property("prop_name", None) == "prop_name"
 
 def test_format_properties():
-    keys = ("foo", "bar", "int", "float", "true", "false")
-    values = ("foo", "bar", 19990526, 2008.0521, True, False)
-    formatted = "foo=\"foo\" bar=\"bar\" int=\"19990526\" float=\"2008.0521\" true=\"true\" false=\"false\""
-    str_formatted = "foo=foo bar=bar int=19990526 float=2008.0521 true=True false=False"
+    def str_formatter(name, value):
+        return f"{name}={value}"
+
+    keys = ("foo", "bar", "int", "float", "true", "false", "none")
+    values = ("foo", "bar", 19990526, 2008.0521, True, False, None)
+    formatted = "foo=\"foo\" bar=\"bar\" int=\"19990526\" float=\"2008.0521\" true=\"true\" false=\"false\" none"
+    str_formatted = "foo=foo bar=bar int=19990526 float=2008.0521 true=True false=False none=None"
     test = dict(zip(keys, values))
 
     assert format_properties(test) == formatted
-    assert format_properties(test, value_formatter=format_property) == formatted
-    assert format_properties(test, value_formatter=str) == str_formatted
+    assert format_properties(test, prop_formatter=format_property) == formatted
+    assert format_properties(test, prop_formatter=str_formatter) == str_formatted
 
 def test_xml_format_element():
     assert xml_format_element("<&>\"'¢£¥€©®") == "&lt;&amp;&gt;\"'¢£¥€©®"

@@ -9,35 +9,45 @@ from xml.sax.saxutils import escape as xml_escape
 from markyp import ElementType, PropertyDict, PropertyValue
 
 
-def format_property(value: PropertyValue) -> str:
+def format_property(name: str, value: PropertyValue) -> str:
     """
     Formatter function for element properties.
 
+    If `value` is `None`, `name` will be returned to allow the creation of flag attributes
+    such as `disabled` in HTML.
+
+    Boolean values are converted to lower-case strings.
+
     Arguments:
-        value: The value to format.
+        name: The name of the property.
+        value: The value to format. `None` means the property is simply a flag
+               and simply `name` should be returned.
 
     Returns:
         The formatted string value.
     """
+    if value is None:
+        return name
+
     if isinstance(value, bool):
         value = "true" if value else "false"
 
-    return f"\"{value}\""
+    return f"{name}=\"{value}\""
 
 
 def format_properties(properties: PropertyDict, *,
-                      value_formatter: Callable[[PropertyValue], str] = format_property) -> str:
+                      prop_formatter: Callable[[str, PropertyValue], str] = format_property) -> str:
     """
     Formats the given dictionary as a list of element properties.
 
     Arguments:
         properties: The properties to format.
-        value_formatter: The function to use to turn property values to strings.
+        prop_formatter: The function to use to turn properties to strings.
 
     Returns:
         The formatted string value.
     """
-    return " ".join((f"{key}={value_formatter(value)}" for key, value in properties.items()))
+    return " ".join((prop_formatter(name, value) for name, value in properties.items()))
 
 
 def xml_format_element(element: ElementType) -> str:
