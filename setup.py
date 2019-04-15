@@ -3,14 +3,22 @@ from os import path
 import re
 from setuptools import setup, find_packages
 
+# Constants
+
+NAME = "markyp"
+
 # Get the long description from the README file
 with open(path.join(path.abspath(path.dirname(__file__)), "README.md"), encoding="utf-8") as f:
     readme = f.read()
 
-# Get the version from the root __init__.py file.
-with open(path.join(path.abspath(path.dirname(__file__)), "src", "markyp", "__init__.py"), encoding="utf-8") as f:
-    match = re.search("__version__ = \"(.*?)\"", f.read())
-    version = match.group(1) if match else "0.0.0"
+# Get the metadata from the root __init__.py file.
+with open(path.join(path.abspath(path.dirname(__file__)), NAME, "__init__.py"), encoding="utf-8") as f:
+    content = f.read()
+    _author = re.search("__author__ = \"(.*?)\"", content).group(1)
+    _email = re.search("__email__ = \"(.*?)\"", content).group(1)
+    _license = re.search("__license__ = \"(.*?)\"", content).group(1)
+    _url = re.search("__url__ = \"(.*?)\"", content).group(1)
+    _version = re.search("__version__ = \"(.*?)\"", content).group(1)
 
 # Get the requirements from requirements.txt.
 req_filename = "requirements.txt"
@@ -25,15 +33,15 @@ with open(path.join(path.dirname(path.abspath(__file__)), req_filename)) as req_
 requirements.sort(key=lambda s: s.casefold())
 
 setup(
-    name="markyp",
-    version=version,
+    name=NAME,
+    version=_version,
     description="Python 3 tools for creating markup documents.",
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="https://github.com/volfpeter/markyp",
-    author="Peter Volf",
-    author_email="do.volfp@gmail.com",
-    license="MIT",
+    url=_url,
+    author=_author,
+    author_email=_email,
+    license=_license,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -52,8 +60,7 @@ setup(
         "Typing :: Typed"
     ],
     keywords="markup generator utility xml html rss",
-    package_dir={"": "src"},
-    packages=find_packages("src", exclude=["test"]),
+    packages=find_packages(exclude=["test"]),
     python_requires=">=3.6",
     install_requires=requirements
 )

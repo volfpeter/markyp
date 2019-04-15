@@ -4,8 +4,12 @@ Type declarations and the most basic building blocks of `markyp`.
 
 from typing import Any, Dict, TypeVar, Union
 
-
-__version__ = "0.1903.0"
+__author__ = "Peter Volf"
+__copyright__ = "Copyright 2019, Peter Volf"
+__email__ = "do.volfp@gmail.com"
+__license__ = "MIT"
+__url__ = "https://github.com/volfpeter/markyp"
+__version__ = "0.1904.0"
 
 
 class IElement(object):
