@@ -114,7 +114,7 @@ If you have any questions about contributing to the project, please contact the 
 
 As mentioned in the [contribution guidelines](#contribution-guidelines), the project is type-checked using `mypy`, so first of all, the project must pass `mypy`'s static code analysis.
 
-The project is tested using `pytest`. The chosen test layout is that tests are part of the application code, see [this page](https://docs.pytest.org/en/latest/goodpractices.html#tests-as-part-of-application-code) for details on what it means in practice.
+The project is tested using `pytest`. The chosen test layout is that tests are outside the application code, see [this page](https://docs.pytest.org/en/latest/goodpractices.html#tests-outside-application-code) for details on what it means in practice.
 
 If `pytest` is installed, the test set can be executed using the `pytest test` command from within the project directory.
 
