@@ -9,6 +9,9 @@ from xml.sax.saxutils import escape as xml_escape
 from markyp import ElementType, PropertyDict, PropertyValue
 
 
+__all__ = ("format_property", "format_properties", "xml_format_element", "format_element_sequence")
+
+
 def format_property(name: str, value: PropertyValue) -> str:
     """
     Formatter function for element properties.
