@@ -180,7 +180,7 @@ class EmptyElement(IElement):
 
     __slots__ = ("properties",)
 
-    def __init__(self, class_: Optional[str] = None, **kwargs: PropertyValue) -> None:
+    def __init__(self, *, class_: Optional[str] = None, **kwargs: PropertyValue) -> None:
         """
         Initialization.
 
