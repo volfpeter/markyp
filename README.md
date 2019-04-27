@@ -6,6 +6,16 @@ Python 3 tools for creating markup documents.
 
 The project is listed on the Python Package Index, it can be installed simply by executing `pip install markyp`.
 
+## General concepts
+
+Element creation in `markyp` and its derivates usually works as follows:
+
+- If an element can have children, then the positional arguments passed to the component become the children of the created element.
+- If an element can have attributes, then keyword arguments that are not listed explicitly on the argument list (i.e. `**kwargs`) are turned into element attributes.
+- Explicitly declared keyword arguments work as documented.
+
+The markup defined by the created elements can be obtained by converting to root element to string (`str()`) or by using the root element's `markup` property.
+
 ## Getting started
 
 Creating new `markyp` element types is typically as simple as deriving new classes with the right name from the base elements that are provided by the project. The following example shows the creation of some HTML elements:
