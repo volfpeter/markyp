@@ -91,10 +91,10 @@ print(document)
 
 `markyp` extensions should follow the `markyp-{domain-or-extension-name}` naming convention. Here is a list of domain-specific extensions:
 
-- `markyp-rss`: Work in progress at https://github.com/volfpeter/markyp-rss, contribution is welcome.
-- `markyp-html`: Work in progress at https://github.com/volfpeter/markyp-html, contribution is welcome.
-- `markyp-highlightjs`: Work in progress at https://github.com/volfpeter/markyp-highlightjs, contribution is welcome.markyp-highlightjs
-- `markyp-bootstrap4`: Work in progress at https://github.com/volfpeter/markyp-bootstrap4, contribution is welcome.
+- `markyp-rss`: RSS 2 implementation at https://github.com/volfpeter/markyp-rss, contribution is welcome.
+- `markyp-html`: HTML implementation at https://github.com/volfpeter/markyp-html, contribution is welcome.
+- `markyp-highlightjs`: HTML code highlighting using `highlight.js` at https://github.com/volfpeter/markyp-highlightjs, contribution is welcome.markyp-highlightjs
+- `markyp-bootstrap4`: Bootstrap 4 implementation at https://github.com/volfpeter/markyp-bootstrap4, contribution is welcome.
 
 If you have created an open source `markyp` extension, please let us know and we will include your project in this list.
 
