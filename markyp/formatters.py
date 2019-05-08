@@ -66,7 +66,7 @@ def xml_format_element(element: ElementType) -> str:
     return xml_escape(element) if isinstance(element, str) else str(element)
 
 
-def format_element_sequence(elements: Sequence[ElementType], *,
+def format_element_sequence(elements: Sequence[Union[ElementType, None]], *,
                             element_formatter: Callable[[ElementType], str] = xml_format_element,
                             inline: bool = False) -> str:
     """
@@ -90,4 +90,4 @@ def format_element_sequence(elements: Sequence[ElementType], *,
         separator = "\n"
         elements = ("", *elements, "")
 
-    return separator.join((element_formatter(element) for element in elements))
+    return separator.join((element_formatter(element) for element in elements if element is not None))

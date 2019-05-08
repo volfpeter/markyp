@@ -39,16 +39,21 @@ def test_xml_format_element():
 
 def test_format_element_sequence():
     elements = (
+        None,
         TE(
             "foo-1",
             TE(
                 "foo-inner",
+                None,
                 TE("foo-inner-inner")
             ),
+            None,
             "foo-2"
         ),
         "bar",
-        TE(baz="baz")
+        None,
+        TE(baz="baz"),
+        None
     )
 
     assert format_element_sequence(elements, inline=True) ==\
