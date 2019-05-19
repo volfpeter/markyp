@@ -1,3 +1,5 @@
+[![Downloads](https://pepy.tech/badge/markyp/month)](https://pepy.tech/project/markyp/month)
+
 # markyp
 
 Python 3 tools for creating markup documents.
