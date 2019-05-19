@@ -1,4 +1,6 @@
+[![Downloads](https://pepy.tech/badge/markyp)](https://pepy.tech/project/markyp)
 [![Downloads](https://pepy.tech/badge/markyp/month)](https://pepy.tech/project/markyp/month)
+[![Downloads](https://pepy.tech/badge/markyp/week)](https://pepy.tech/project/markyp/week)
 
 # markyp
 
