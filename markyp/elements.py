@@ -5,12 +5,23 @@ Base `markyp` element implementations.
 from typing import List, Sequence, Optional
 
 from markyp import ElementType, IElement, PropertyDict, PropertyValue, is_element
-from markyp.formatters import format_element_sequence, format_properties, xml_format_element, xml_escape
+from markyp.formatters import (
+    format_element_sequence,
+    format_properties,
+    xml_format_element,
+    xml_escape,
+)
 
 
 __all__ = (
-    "BaseElement", "ChildrenOnlyElement", "Element", "ElementSequence",
-    "EmptyElement", "SelfClosedElement", "StandaloneElement", "StringElement"
+    "BaseElement",
+    "ChildrenOnlyElement",
+    "Element",
+    "ElementSequence",
+    "EmptyElement",
+    "SelfClosedElement",
+    "StandaloneElement",
+    "StringElement",
 )
 
 
@@ -29,9 +40,15 @@ class BaseElement(IElement):
         properties = self.get_element_properties()
         properties_str = format_properties(properties) if properties is not None else ""
         children = self.get_element_children()
-        children_str =\
-            format_element_sequence(children,  element_formatter=xml_format_element, inline=self.inline_children)\
-            if children is not None else ""
+        children_str = (
+            format_element_sequence(
+                children,
+                element_formatter=xml_format_element,
+                inline=self.inline_children,
+            )
+            if children is not None
+            else ""
+        )
         return f"<{name} {properties_str}>{children_str}</{name}>"
 
     @property
@@ -113,12 +130,17 @@ class Element(IElement):
 
     Child elements will be placed on new lines and string children will be XML-escaped by default.
 
+    The element implements the following `MutableMapping` protocol methods to provide convenient
+    access to element properties: `__getitem__()`, `__setitem__()`, `__delitem__()`, and `get()`.
+
     Define `__slots__` in derived classes to enjoy the performance benefits the feature provides.
     """
 
     __slots__ = ("children", "properties")
 
-    def __init__(self, *args: ElementType, class_: Optional[str] = None, **kwargs: PropertyValue) -> None:
+    def __init__(
+        self, *args: ElementType, class_: Optional[str] = None, **kwargs: PropertyValue
+    ) -> None:
         """
         Initialization.
 
@@ -140,6 +162,26 @@ class Element(IElement):
     def __str__(self) -> str:
         name: str = self.element_name
         return f"<{name} {format_properties(self.properties)}>{format_element_sequence(self.children, element_formatter=xml_format_element, inline=self.inline_children)}</{name}>"
+
+    def __getitem__(self, key: str) -> PropertyValue:
+        return self.properties[key]
+
+    def __setitem__(self, key: str, value: PropertyValue) -> None:
+        self.properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.properties[key]
+
+    def get(self, key: str, default: PropertyValue = None) -> PropertyValue:
+        """
+        Returns the element property with the given name or the default value if the property
+        has not been set on the element.
+
+        Arguments:
+            key: The element property to look up.
+            default: The default value to return if the property has not been set on the element.
+        """
+        return self.properties.get(key, default)
 
     @property
     def element_name(self) -> str:
@@ -168,19 +210,28 @@ class ElementSequence(ChildrenOnlyElement):
     __slots__ = ()
 
     def __str__(self) -> str:
-        return "" if len(self.children) == 0 else "\n".join((xml_format_element(element) for element in self.children))
+        return (
+            ""
+            if len(self.children) == 0
+            else "\n".join((xml_format_element(element) for element in self.children))
+        )
 
 
 class EmptyElement(IElement):
     """
     Base class for elements that have no children, only properties.
 
+    The element implements the following `MutableMapping` protocol methods to provide convenient
+    access to element properties: `__getitem__()`, `__setitem__()`, `__delitem__()`, and `get()`.
+
     Define `__slots__` in derived classes to enjoy the performance benefits the feature provides.
     """
 
     __slots__ = ("properties",)
 
-    def __init__(self, *, class_: Optional[str] = None, **kwargs: PropertyValue) -> None:
+    def __init__(
+        self, *, class_: Optional[str] = None, **kwargs: PropertyValue
+    ) -> None:
         """
         Initialization.
 
@@ -196,6 +247,26 @@ class EmptyElement(IElement):
     def __str__(self) -> str:
         name: str = self.element_name
         return f"<{name} {format_properties(self.properties)}></{name}>"
+
+    def __getitem__(self, key: str) -> PropertyValue:
+        return self.properties[key]
+
+    def __setitem__(self, key: str, value: PropertyValue) -> None:
+        self.properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.properties[key]
+
+    def get(self, key: str, default: PropertyValue = None) -> PropertyValue:
+        """
+        Returns the element property with the given name or the default value if the property
+        has not been set on the element.
+
+        Arguments:
+            key: The element property to look up.
+            default: The default value to return if the property has not been set on the element.
+        """
+        return self.properties.get(key, default)
 
     @property
     def element_name(self) -> str:
@@ -237,12 +308,17 @@ class StringElement(IElement):
     """
     Base class for elements that have a single string children and any number of properties.
 
+    The element implements the following `MutableMapping` protocol methods to provide convenient
+    access to element properties: `__getitem__()`, `__setitem__()`, `__delitem__()`, and `get()`.
+
     Define `__slots__` in derived classes to enjoy the performance benefits the feature provides.
     """
 
     __slots__ = ("properties", "value")
 
-    def __init__(self, value: str, *, class_: Optional[str] = None, **kwargs: PropertyValue) -> None:
+    def __init__(
+        self, value: str, *, class_: Optional[str] = None, **kwargs: PropertyValue
+    ) -> None:
         """
         Initialization.
 
@@ -267,6 +343,26 @@ class StringElement(IElement):
         name: str = self.element_name
         value = xml_escape(self.value) if self.value is not None else ""
         return f"<{name} {format_properties(self.properties)}>{value}</{name}>"
+
+    def __getitem__(self, key: str) -> PropertyValue:
+        return self.properties[key]
+
+    def __setitem__(self, key: str, value: PropertyValue) -> None:
+        self.properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.properties[key]
+
+    def get(self, key: str, default: PropertyValue = None) -> PropertyValue:
+        """
+        Returns the element property with the given name or the default value if the property
+        has not been set on the element.
+
+        Arguments:
+            key: The element property to look up.
+            default: The default value to return if the property has not been set on the element.
+        """
+        return self.properties.get(key, default)
 
     @property
     def element_name(self) -> str:

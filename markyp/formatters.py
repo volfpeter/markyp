@@ -9,7 +9,12 @@ from xml.sax.saxutils import escape as xml_escape
 from markyp import ElementType, PropertyDict, PropertyValue
 
 
-__all__ = ("format_property", "format_properties", "xml_format_element", "format_element_sequence")
+__all__ = (
+    "format_property",
+    "format_properties",
+    "xml_format_element",
+    "format_element_sequence",
+)
 
 
 def format_property(name: str, value: PropertyValue) -> str:
@@ -35,11 +40,14 @@ def format_property(name: str, value: PropertyValue) -> str:
     if isinstance(value, bool):
         value = "true" if value else "false"
 
-    return f"{name}=\"{value}\""
+    return f'{name}="{value}"'
 
 
-def format_properties(properties: PropertyDict, *,
-                      prop_formatter: Callable[[str, PropertyValue], str] = format_property) -> str:
+def format_properties(
+    properties: PropertyDict,
+    *,
+    prop_formatter: Callable[[str, PropertyValue], str] = format_property,
+) -> str:
     """
     Formats the given dictionary as a list of element properties.
 
@@ -66,9 +74,12 @@ def xml_format_element(element: ElementType) -> str:
     return xml_escape(element) if isinstance(element, str) else str(element)
 
 
-def format_element_sequence(elements: Sequence[Union[ElementType, None]], *,
-                            element_formatter: Callable[[ElementType], str] = xml_format_element,
-                            inline: bool = False) -> str:
+def format_element_sequence(
+    elements: Sequence[Union[ElementType, None]],
+    *,
+    element_formatter: Callable[[ElementType], str] = xml_format_element,
+    inline: bool = False,
+) -> str:
     """
     Formats the given sequence of elements.
 
@@ -90,4 +101,6 @@ def format_element_sequence(elements: Sequence[Union[ElementType, None]], *,
         separator = "\n"
         elements = ("", *elements, "")
 
-    return separator.join((element_formatter(element) for element in elements if element is not None))
+    return separator.join(
+        (element_formatter(element) for element in elements if element is not None)
+    )

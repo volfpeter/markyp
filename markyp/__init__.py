@@ -9,7 +9,7 @@ __copyright__ = "Copyright 2019, Peter Volf"
 __email__ = "do.volfp@gmail.com"
 __license__ = "MIT"
 __url__ = "https://github.com/volfpeter/markyp"
-__version__ = "0.1906.0"
+__version__ = "0.1909.0"
 
 
 __all__ = ("IElement", "ElementType", "PropertyValue", "PropertyDict", "is_element")
@@ -26,7 +26,9 @@ class IElement(object):
         """
         Returns the string representation of the element including all its children.
         """
-        raise NotImplementedError("IElement is abstract, please override __str__() in the child class.")
+        raise NotImplementedError(
+            "IElement is abstract, please override __str__() in the child class."
+        )
 
     @property
     def markup(self) -> str:
