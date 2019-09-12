@@ -177,7 +177,7 @@ class Parser:
         return (
             [self.convert(item) for item in node]
             if self._is_empty_string(node.text)
-            else [node.text]
+            else [node.text.strip()]
             if node.text
             else []
         )
@@ -210,16 +210,16 @@ class Parser:
         if isinstance(rule, ParserRule):
             return rule.tag_name, rule.factory
 
-        if issubclass(rule, IElement):
-            return rule.__name__, rule
-
         if (
             isinstance(rule, tuple)
             and len(rule) == 2
             and isinstance(rule[0], str)
             and issubclass(rule[1], IElement)
         ):
-            return rule[0], rule[1]
+            return rule
+
+        if issubclass(rule, IElement):
+            return rule.__name__, rule
 
         raise ValueError(f"Invalid factory rule: {rule}")
 
