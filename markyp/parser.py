@@ -1,15 +1,13 @@
 """
-`lxml`-based markup parser.
+Markup parser.
 
-The module requires `lxml` to be installed.
+The module is built on the `xml` module of the standard library, therefore it inherits
+the standard library's security limitations.
 """
 
 from typing import Callable, Dict, NamedTuple, Optional, Sequence, Tuple, Type, Union
 
-try:
-    from lxml import etree
-except ImportError:
-    raise ImportError("Please install lxml to use this module.")
+import xml.etree.ElementTree as ET
 
 from markyp import ElementType, IElement, PropertyDict, PropertyValue
 from markyp.elements import Element
@@ -22,9 +20,6 @@ Converter = Callable[
     [Type[ElementType], Sequence[ElementType], PropertyDict],
     Tuple[Type[ElementType], Sequence[ElementType], PropertyDict],
 ]
-
-
-FactoryType = Union[Type[IElement], ParserRule]
 
 
 class ParserRule(NamedTuple):
@@ -41,6 +36,9 @@ class ParserRule(NamedTuple):
     """
     The element factory to use for the corresponding tag.
     """
+
+
+FactoryType = Union[Type[IElement], ParserRule]
 
 
 class AnyElement(Element):
@@ -120,7 +118,7 @@ class Parser:
         self._converter = func
         return func
 
-    def convert(self, node: etree.Element) -> ElementType:
+    def convert(self, node: ET.Element) -> ElementType:
         """
         Recursively converts the given element into a `markyp` element hierarchy.
 
@@ -143,6 +141,19 @@ class Parser:
 
         return factory(*children, **props)  # type: ignore
 
+    def fromstring(self, data: str) -> ElementType:
+        """
+        Parses the given XML string.
+
+        Arguments:
+            data: The string to parse.
+
+        Returns:
+            The parsed element hierarchy.
+        """
+        tree = ET.fromstring(data)
+        return self.convert(tree)
+
     def parse(self, path: str) -> ElementType:
         """
         Parses the file at the given path.
@@ -153,10 +164,10 @@ class Parser:
         Returns:
             The parsed element hierarchy.
         """
-        tree = etree.parse(path).getroot()
+        tree = ET.parse(path).getroot()
         return self.convert(tree)
 
-    def _get_children(self, node: etree.Element) -> Sequence[ElementType]:
+    def _get_children(self, node: ET.Element) -> Sequence[ElementType]:
         """
         Returns the children elements of the given `etree` element as `markyp` elements.
 
@@ -164,12 +175,14 @@ class Parser:
             node: The node whose children are required.
         """
         return (
-            [self.convert(item) for item in node.iterchildren(tag=etree.Element)]
+            [self.convert(item) for item in node]
             if self._is_empty_string(node.text)
             else [node.text]
+            if node.text
+            else []
         )
 
-    def _get_properties(self, node: etree.Element) -> PropertyDict:
+    def _get_properties(self, node: ET.Element) -> PropertyDict:
         """
         Returns the properties of the given `etree` element.
 
