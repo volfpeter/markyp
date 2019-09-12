@@ -1,3 +1,5 @@
+import pytest
+
 from markyp import ElementType, PropertyDict
 from markyp.elements import (
     ChildrenOnlyElement,
@@ -29,6 +31,20 @@ def test_converter():
         parsed = parser.fromstring(markup)
         assert_elements_equal(parsed, converted_element)
         assert parsed.markup == converted_markup
+
+
+def test_factory_error():
+    class Foo:
+        pass
+
+    with pytest.raises(ValueError):
+        Parser(Foo)
+
+    with pytest.raises(ValueError):
+        Parser((Element, "tag"))
+
+    with pytest.raises(ValueError):
+        Parser(("tag", Element, "extra-item"))
 
 
 def get_elements():

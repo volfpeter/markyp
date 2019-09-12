@@ -218,8 +218,11 @@ class Parser:
         ):
             return rule
 
-        if issubclass(rule, IElement):
-            return rule.__name__, rule
+        try:
+            if issubclass(rule, IElement):
+                return rule.__name__, rule
+        except TypeError:
+            pass
 
         raise ValueError(f"Invalid factory rule: {rule}")
 
