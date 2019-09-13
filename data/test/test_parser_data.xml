@@ -1,0 +1,11 @@
+<ChildrenOnlyElement>
+    <Element attr1="1">
+        Children
+    </Element>
+    <EmptyElement attr1="11" attr2="22"></EmptyElement>
+    <SelfClosedElement attr1="111" attr2="222"/>
+    <StringElement >String children</StringElement>
+    <Any attr="any-element">
+        AnyElement content
+    </Any>
+</ChildrenOnlyElement>

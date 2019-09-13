@@ -11,16 +11,6 @@ from markyp.elements import (
 from markyp.parser import AnyElement, Converter, Parser, ParserRule
 
 
-def test_parser():
-    element = get_elements()
-    markup = element.markup
-
-    for i, parser in enumerate(get_parsers()):
-        parsed = parser.fromstring(markup)
-        assert_elements_equal(parsed, element)
-        assert parsed.markup == markup
-
-
 def test_converter():
     element = get_elements()
     markup = element.markup
@@ -45,6 +35,26 @@ def test_factory_error():
 
     with pytest.raises(ValueError):
         Parser(("tag", Element, "extra-item"))
+
+
+def test_parse_from_file():
+    element = get_elements()
+    markup = element.markup
+
+    for i, parser in enumerate(get_parsers()):
+        parsed = parser.parse("data/test/test_parser_data.xml")
+        assert_elements_equal(parsed, element)
+        assert parsed.markup == markup
+
+
+def test_parser():
+    element = get_elements()
+    markup = element.markup
+
+    for i, parser in enumerate(get_parsers()):
+        parsed = parser.fromstring(markup)
+        assert_elements_equal(parsed, element)
+        assert parsed.markup == markup
 
 
 def get_elements():
