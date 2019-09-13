@@ -77,34 +77,63 @@ class AnyElement(Element):
 class Parser:
     """
     `markyp` element parser.
+
+    The parser accepts the following types of rules:
+
+    - `IElement` classes / factory types: Class that handles tags whose name matches the class' name.
+    - `ParserRule` or equivalent `tuple`: Tag name - factory type pair. When the parser encounters
+        an element with the given tag name, it will use the given factory type to process it.
+
+    When the parser finds an element with a tag for which there is no registered rule, it will
+    convert the element into an `AnyElement` instance, making sure the tag name, properties, and
+    children of the element are all kept intact.
     """
 
-    __slots__ = ("_factories", "_converter")
+    __slots__ = ("_converter", "_rules")
 
     def __init__(self, *rules: FactoryType):
         """
         Initialization.
+
+        Positional arguments will be passed on to the `add_rules()` method. Each argument
+        must be an element factory type, a `ParserRule` or an equivalent `tuple`.
         """
-        self._factories: Dict[str, Type[ElementType]] = dict()
         self._converter: Optional[Converter] = None
+        """
+        Function that converts a factory type - children list - properties dictionary tuple
+        into another, similar tuple that will be used for element creation.
+        """
+
+        self._rules: Dict[str, Type[ElementType]] = dict()
+        """
+        The rules (tag name - factory type pairs) the parser uses.
+        """
 
         self.add_rules(rules)
 
     def add_rules(self, rules: Sequence[FactoryType]) -> None:
         """
         Adds the given list of rules to the parser.
+
+        Arguments:
+            rules: Element factory types or parser rules (`ParserRule` or equivalent tuple
+                   instances) to add to the parser.
         """
-        self._factories.update(dict(self._get_factory_entry(item) for item in rules))
+        self._rules.update(dict(self._get_rule_entry(item) for item in rules))
 
     def clear_rules(self) -> None:
         """
         Clears all the rules from the parser.
         """
-        self._factories.clear()
+        self._rules.clear()
 
     def set_rules(self, rules: Sequence[FactoryType]) -> None:
         """
         Replaces the current rules with the provided new ones.
+
+        Arguments:
+            rules: Element factory types or parser rules (`ParserRule` or equivalent tuple
+                   instances) the parser should use.
         """
         self.clear_rules()
         self.add_rules(rules)
@@ -114,6 +143,13 @@ class Parser:
         Sets the factory-children-property converter of the parser to the given value.
 
         The method can be used as a decorator.
+
+        Arguments:
+            func: Function that takes a factory type - children sequence - properties dictionary
+                  and converts it to a another, similar tuple (replacing or changing any of the
+                  received values). The only requirement regarding the returned tuple is that
+                  it must be possible to execute the `factory(*children, **properties)` call
+                  with them.
         """
         self._converter = func
         return func
@@ -129,7 +165,7 @@ class Parser:
             The created `markyp` element hierachy.
         """
         tag = node.tag
-        factory = self._factories.get(tag, AnyElement)
+        factory = self._rules.get(tag, AnyElement)
         children: Sequence[ElementType] = self._get_children(node)
         props = self._get_properties(node)
 
@@ -194,15 +230,15 @@ class Parser:
             for key, value in node.items()
         }
 
-    def _get_factory_entry(self, rule: FactoryType) -> Tuple[str, Type[IElement]]:
+    def _get_rule_entry(self, rule: FactoryType) -> Tuple[str, Type[IElement]]:
         """
-        Returns a factory entry tuple for the given rule.
+        Returns a rule entry tuple for the given rule.
 
         Arguments:
-            rule: The rule to create the factory entry tuple from.
+            rule: The rule to create the rule entry tuple from.
 
         Returns:
-            Factory entry tuple for the given rule.
+            Rule entry tuple for the given rule.
 
         Raises:
             ValueError: When the given rule is invalid or can not be recognized.
