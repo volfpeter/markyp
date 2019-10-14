@@ -8,21 +8,26 @@ from setuptools import setup, find_packages
 NAME = "markyp"
 
 # Get the long description from the README file
-with open(path.join(path.abspath(path.dirname(__file__)), "README.md"), encoding="utf-8") as f:
+with open(
+    path.join(path.abspath(path.dirname(__file__)), "README.md"), encoding="utf-8"
+) as f:
     readme = f.read()
 
 # Get the metadata from the root __init__.py file.
-with open(path.join(path.abspath(path.dirname(__file__)), NAME, "__init__.py"), encoding="utf-8") as f:
+with open(
+    path.join(path.abspath(path.dirname(__file__)), NAME, "__init__.py"),
+    encoding="utf-8",
+) as f:
     content = f.read()
-    _author = re.search("__author__ = \"(.*?)\"", content).group(1)
-    _email = re.search("__email__ = \"(.*?)\"", content).group(1)
-    _license = re.search("__license__ = \"(.*?)\"", content).group(1)
-    _url = re.search("__url__ = \"(.*?)\"", content).group(1)
-    _version = re.search("__version__ = \"(.*?)\"", content).group(1)
+    _author = re.search('__author__ = "(.*?)"', content).group(1)
+    _email = re.search('__email__ = "(.*?)"', content).group(1)
+    _license = re.search('__license__ = "(.*?)"', content).group(1)
+    _url = re.search('__url__ = "(.*?)"', content).group(1)
+    _version = re.search('__version__ = "(.*?)"', content).group(1)
 
 # Get the requirements from requirements.txt.
 req_filename = "requirements.txt"
-exp = re.compile("(?P<req>\\w+)\\s*(?P<op>[<>=!~]+)\\s*(?P<ver>[\\w.]+)")
+exp = re.compile("(?P<req>[-_\\w]+)\\s*(?P<op>[<>=!~]+)\\s*(?P<ver>[\\w.]+)")
 requirements = []
 with open(path.join(path.dirname(path.abspath(__file__)), req_filename)) as req_file:
     for line in req_file:
@@ -57,10 +62,10 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Text Processing :: Markup",
         "Topic :: Utilities",
-        "Typing :: Typed"
+        "Typing :: Typed",
     ],
     keywords="markup generator utility xml html rss",
     packages=find_packages(exclude=["test"]),
     python_requires=">=3.6",
-    install_requires=requirements
+    install_requires=requirements,
 )
