@@ -98,8 +98,9 @@ print(document)
 
 - `markyp-rss`: RSS 2 implementation at https://github.com/volfpeter/markyp-rss, contribution is welcome.
 - `markyp-html`: HTML implementation at https://github.com/volfpeter/markyp-html, contribution is welcome.
-- `markyp-highlightjs`: HTML code highlighting using `highlight.js` at https://github.com/volfpeter/markyp-highlightjs, contribution is welcome.markyp-highlightjs
+- `markyp-highlightjs`: HTML code highlighting using `highlight.js` at https://github.com/volfpeter/markyp-highlightjs, contribution is welcome.
 - `markyp-bootstrap4`: Bootstrap 4 implementation at https://github.com/volfpeter/markyp-bootstrap4, contribution is welcome.
+- `markyp-fontawesome`: Font Awesome icons for `markyp-html`-based web pages at https://github.com/volfpeter/markyp-fontawesome, contribution is welcome.
 
 If you have created an open source `markyp` extension, please let us know and we will include your project in this list.
 
