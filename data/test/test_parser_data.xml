@@ -8,4 +8,8 @@
     <Any attr="any-element">
         AnyElement content
     </Any>
+    <SelfClosedElement/>
+    <IgnoreElement is_parsed="false">
+        This element won't be parsed
+    </IgnoreElement>
 </ChildrenOnlyElement>

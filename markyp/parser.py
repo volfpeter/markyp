@@ -74,6 +74,17 @@ class AnyElement(Element):
         return self._tag
 
 
+class IgnoreElement(IElement):
+    """
+    Element to use in `ParserRule`s for tags that should not be parsed.
+    """
+
+    __slots__ = ()
+
+    def __new__(cls, *args, **kwargs) -> None:
+        return None
+
+
 class Parser:
     """
     `markyp` element parser.
@@ -210,13 +221,10 @@ class Parser:
         Arguments:
             node: The node whose children are required.
         """
-        return (
-            [self.convert(item) for item in node]
-            if self._is_empty_string(node.text)
-            else [node.text.strip()]
-            if node.text
-            else []
-        )
+        if self._is_empty_string_or_none(node.text):
+            return [e for e in (self.convert(item) for item in node) if e is not None]
+        else:
+            return [node.text.strip()]  # type: ignore
 
     def _get_properties(self, node: ET.Element) -> PropertyDict:
         """
@@ -262,9 +270,9 @@ class Parser:
 
         raise ValueError(f"Invalid factory rule: {rule}")
 
-    def _is_empty_string(self, value: Optional[str]) -> bool:
+    def _is_empty_string_or_none(self, value: Optional[str]) -> bool:
         """
-        Returns whether the given value is an empty string.
+        Returns whether the given value is an empty string or `None`.
 
         Arguments:
             value: The value to check.

@@ -8,7 +8,7 @@ from markyp.elements import (
     SelfClosedElement,
     StringElement,
 )
-from markyp.parser import AnyElement, Converter, Parser, ParserRule
+from markyp.parser import AnyElement, IgnoreElement, Converter, Parser, ParserRule
 
 
 def test_converter():
@@ -64,6 +64,7 @@ def get_elements():
         SelfClosedElement(attr1="111", attr2="222"),
         StringElement("String children"),
         AnyElement("AnyElement content", element_tag="Any", attr="any-element"),
+        SelfClosedElement(),
     )
 
 
@@ -79,6 +80,7 @@ def get_converted_elements():
             attr="any-element",
             converter="applied",
         ),
+        SelfClosedElement(converter="applied"),
     )
 
 
@@ -100,15 +102,34 @@ def assert_elements_equal(foo: ElementType, bar: ElementType):
 
 def get_parsers(converter=None):
     parser_1 = Parser(
-        ChildrenOnlyElement, Element, EmptyElement, SelfClosedElement, StringElement
+        ChildrenOnlyElement,
+        Element,
+        EmptyElement,
+        SelfClosedElement,
+        StringElement,
+        IgnoreElement,
     )
     parser_2 = Parser()
     parser_2.add_rules(
-        [ChildrenOnlyElement, Element, EmptyElement, SelfClosedElement, StringElement]
+        [
+            ChildrenOnlyElement,
+            Element,
+            EmptyElement,
+            SelfClosedElement,
+            StringElement,
+            IgnoreElement,
+        ]
     )
     parser_3 = Parser(("Element", ErrorElement), ("EmptyElement", ErrorElement))
     parser_3.set_rules(
-        [ChildrenOnlyElement, Element, EmptyElement, SelfClosedElement, StringElement]
+        [
+            ChildrenOnlyElement,
+            Element,
+            EmptyElement,
+            SelfClosedElement,
+            StringElement,
+            IgnoreElement,
+        ]
     )
     parser_4 = Parser(
         ("ChildrenOnlyElement", ChildrenOnlyElement),
@@ -116,6 +137,7 @@ def get_parsers(converter=None):
         ("EmptyElement", EmptyElement),
         ("SelfClosedElement", SelfClosedElement),
         ("StringElement", StringElement),
+        ("IgnoreElement", IgnoreElement),
     )
     parser_5 = Parser(
         ParserRule("ChildrenOnlyElement", ChildrenOnlyElement),
@@ -123,6 +145,7 @@ def get_parsers(converter=None):
         ParserRule("EmptyElement", EmptyElement),
         ParserRule("SelfClosedElement", SelfClosedElement),
         ParserRule("StringElement", StringElement),
+        ParserRule("IgnoreElement", IgnoreElement),
     )
 
     parsers = (parser_1, parser_2, parser_3, parser_4, parser_5)
