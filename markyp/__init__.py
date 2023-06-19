@@ -2,14 +2,14 @@
 Type declarations and the most basic building blocks of `markyp`.
 """
 
-from typing import Any, Dict, TypeVar, Union
+from typing import Any, Dict, Union
 
 __author__ = "Peter Volf"
 __copyright__ = "Copyright 2019, Peter Volf"
 __email__ = "do.volfp@gmail.com"
 __license__ = "MIT"
 __url__ = "https://github.com/volfpeter/markyp"
-__version__ = "0.1910.0"
+__version__ = "0.2306.0"
 
 
 __all__ = ("IElement", "ElementType", "PropertyValue", "PropertyDict", "is_element")
