@@ -66,6 +66,7 @@ setup(
     ],
     keywords="markup generator utility xml html rss",
     packages=find_packages(exclude=["test"]),
+    package_data={"markyp": ["py.typed"]},
     python_requires=">=3.6",
     install_requires=requirements,
 )
