@@ -9,13 +9,13 @@ pytest = "*"
 pytest-cov = "*"
 sphinx = "*"
 recommonmark = "*"
-pylint = "*"
 mypy = "*"
+ruff = "*"
 
 [packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
 
 [pipenv]
 allow_prereleases = true

@@ -2,9 +2,9 @@
 Base `markyp` element implementations.
 """
 
-from typing import List, Sequence, Optional
+from typing import Sequence, Optional
 
-from markyp import ElementType, IElement, PropertyDict, PropertyValue, is_element
+from markyp import ElementType, IElement, PropertyDict, PropertyValue
 from markyp.formatters import (
     format_element_sequence,
     format_properties,
@@ -69,7 +69,7 @@ class BaseElement(IElement):
         """
         return False
 
-    def get_element_children(self) -> Optional[Sequence[ElementType]]:
+    def get_element_children(self) -> Optional[Sequence[ElementType | None]]:
         """
         Returns the children elements of the element if it has children.
         """
@@ -91,14 +91,14 @@ class ChildrenOnlyElement(IElement):
 
     __slots__ = ("children",)
 
-    def __init__(self, *args: ElementType) -> None:
+    def __init__(self, *args: ElementType | None) -> None:
         """
         Initialization.
 
         An arbitrary number of positional arguments are accepted that must be either `IElement`
         instances or strings. Each positional argument will become a child of the element.
         """
-        self.children: Sequence[ElementType] = args
+        self.children: Sequence[ElementType | None] = args
         """The child elements."""
 
     def __str__(self) -> str:
@@ -139,7 +139,10 @@ class Element(IElement):
     __slots__ = ("children", "properties")
 
     def __init__(
-        self, *args: ElementType, class_: Optional[str] = None, **kwargs: PropertyValue
+        self,
+        *args: ElementType | None,
+        class_: Optional[str] = None,
+        **kwargs: PropertyValue,
     ) -> None:
         """
         Initialization.
@@ -150,7 +153,7 @@ class Element(IElement):
         The `class_` keyword argument is converted into the `class` element property,
         other keyword arguments are converted to element properties as they were defined.
         """
-        self.children: Sequence[ElementType] = args
+        self.children: Sequence[ElementType | None] = args
         """The child elements."""
 
         self.properties: PropertyDict = kwargs
@@ -213,7 +216,13 @@ class ElementSequence(ChildrenOnlyElement):
         return (
             ""
             if len(self.children) == 0
-            else "\n".join((xml_format_element(element) for element in self.children))
+            else "\n".join(
+                (
+                    xml_format_element(element)
+                    for element in self.children
+                    if element is not None
+                )
+            )
         )
 
 

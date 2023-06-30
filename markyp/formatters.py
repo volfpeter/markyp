@@ -2,7 +2,7 @@
 Generic `markyp` element formatters.
 """
 
-from typing import Any, Callable, Dict, Sequence, Union
+from typing import Callable, Sequence, Union
 
 from xml.sax.saxutils import escape as xml_escape
 
@@ -13,6 +13,7 @@ __all__ = (
     "format_property",
     "format_properties",
     "xml_format_element",
+    "xml_escape",
     "format_element_sequence",
 )
 

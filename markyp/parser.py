@@ -81,7 +81,7 @@ class IgnoreElement(IElement):
 
     __slots__ = ()
 
-    def __new__(cls, *args, **kwargs) -> None:
+    def __new__(cls, *args, **kwargs) -> None:  # type: ignore
         return None
 
 
@@ -186,7 +186,7 @@ class Parser:
         if self._converter is not None:
             factory, children, props = self._converter(factory, children, props)
 
-        return factory(*children, **props)  # type: ignore
+        return factory(*children, **props)
 
     def fromstring(self, data: str) -> ElementType:
         """
@@ -278,4 +278,3 @@ class Parser:
             value: The value to check.
         """
         return value is None or value.strip() == ""
-
